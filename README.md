@@ -1,19 +1,22 @@
 # persistent-memoizer
 
 A Clojure library with one function: redis-memoize. It works like clojure.core/memoize, but keeps the values across JVM restarts thanks to Redis.
+Hashing is done based on function name and optional seed (for when function name does not change, but implementation changes).
 
 Redis is handled by [Carmine](https://github.com/ptaoussanis/carmine). The memoizer requires [Redis](http://redis.io/).
 
 The included `redis.conf` sets up Redis to function as a LRU (Least Recently Used) cache, with 1 GB memory limit.
 
 ```clojure
-[com.keorn/persistent-memoizer "1.0-SNAPSHOT"]
+[com.keorn/persistent-memoizer "1.1-SNAPSHOT"]
 ```
 
 ## Usage
 
 Start Redis server on at `localhost:6379`:
-```redis-server redis.conf```
+```shell
+redis-server redis.conf
+```
 
 ```clojure
 (ns your.ns
@@ -30,8 +33,11 @@ Start Redis server on at `localhost:6379`:
 ;; Call it once, wait for computation
 (fast-return)
 
-;; Call it again: returns memoized value. Persists, as long as, it is still in Redis.
+;; Call it again: returns memoized value. Persists, as long as, it is still in Redis
 (fast-return)
+
+;; If the function implementation changes, then either change the function name, or add a seed value to memoizer
+(def fast-return-new (redis-memoize slow-return 42))
 ```
 
 Serialization is done using [Nippy](https://github.com/ptaoussanis/nippy), types are handled as follows:

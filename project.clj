@@ -1,4 +1,4 @@
-(defproject com.keorn/persistent-memoizer "1.0-SNAPSHOT"
+(defproject com.keorn/persistent-memoizer "1.1-SNAPSHOT"
   :description "Persistent memoize using to Redis"
   :url "https://github.com/keorn/persistent-memoizer"
   :license {:name "Eclipse Public License"
