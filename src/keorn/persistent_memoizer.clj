@@ -7,7 +7,7 @@
   "Memoize to default Redis server. Numbers returned as strings."
   [f-name f & seed]
   (fn [& args]
-    (let [key-hash (hash [f-name args seed])]
+    (let [key-hash (hash (str f-name args seed))]
       (or (car/wcar memoizer-server (car/get key-hash))
           (let [ret (apply f args)]
             (car/wcar memoizer-server (car/set key-hash ret))
